@@ -66,8 +66,8 @@ void MeshBuilder::generateBillboardMesh(UStaticMesh *staticMesh, UMaterialInterf
 
 	generateStaticMesh(staticMesh, builderFunc, nullptr, 
 		[&](UStaticMesh* mesh, FStaticMeshSourceModel &model){
-			mesh->StaticMaterials.Empty();
-			mesh->StaticMaterials.Add(billboardMaterial);
+			mesh->GetStaticMaterials().Empty();
+			mesh->GetStaticMaterials().Add(billboardMaterial);
 
 			model.BuildSettings.bRecomputeNormals = false;
 			model.BuildSettings.bRecomputeTangents = true;

@@ -298,7 +298,7 @@ UMaterial* MaterialBuilder::createTerrainMaterial(const TerrainBuilder *terrainB
 	UE_LOG(JsonLogTerrain, Log, TEXT("Creating material package for terrain \"%s\"(\"%s\") at \"%s\""), 
 		*terrainData.name, *terrainData.exportPath, *materialPackagePath);
 
-	auto materialPackage = CreatePackage(0, *materialPackagePath);
+	auto materialPackage = CreatePackage(*materialPackagePath);
 
 	auto matFactory = NewObject<UMaterialFactoryNew>();
 	matFactory->AddToRoot();

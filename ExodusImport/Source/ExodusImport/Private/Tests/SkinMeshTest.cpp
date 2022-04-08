@@ -56,7 +56,7 @@ void TestSkelMeshFiller::preEdit(){
 }
 
 void TestSkelMeshFiller::handleRefSkeleton(){
-	auto& refSkeleton = skelMesh->RefSkeleton;
+	auto& refSkeleton = skelMesh->GetRefSkeleton();
 	refSkeleton.Empty();
 }
 
@@ -68,14 +68,14 @@ void TestSkelMeshFiller::postEdit(){
 
 void TestSkelMeshFiller::addDefaultMaterial(){
 	UMaterial* defaultMat = UMaterial::GetDefaultMaterial(MD_Surface);
-	skelMesh->Materials.Add(defaultMat);
+	skelMesh->GetMaterials().Add(defaultMat);
 }
 
 void TestSkelMeshFiller::createSkeleton(){
 	auto skeleton = NewObject<USkeleton>(skelMesh->GetOuter());
 	skeleton->SetFlags(RF_Public|RF_Standalone);
 	skeleton->MergeAllBonesToBoneTree(skelMesh);
-	skelMesh->Skeleton = skeleton;// <-- skeleton setting
+	skelMesh->SetSkeleton(skeleton);// <-- skeleton setting
 	FAssetRegistryModule::AssetCreated(skeleton);
 	skeleton->MarkPackageDirty();
 }
@@ -116,7 +116,10 @@ void TestSkelMeshFiller::buildSkeletalMesh(FSkeletalMeshImportData& importData){
 	check(lod != nullptr);
 
 	auto meshBuildModule = FModuleManager::Get().LoadModuleChecked<IMeshBuilderModule>("MeshBuilder");
-	auto success = meshBuildModule.BuildSkeletalMesh(skelMesh, lodIndex, false);
+	
+	FSkeletalMeshBuildParameters SkeletalMeshBuildParameters(skelMesh, GetTargetPlatformManagerRef().GetRunningTargetPlatform(), lodIndex, false);
+		
+	auto success = meshBuildModule.BuildSkeletalMesh(SkeletalMeshBuildParameters);
 }
 
 void TestSkelMeshFiller::addLods(){
@@ -169,7 +172,7 @@ void TestSkelMeshFiller::createBones(FSkeletalMeshImportData& importData){
 	importDataBones.Add(rawBone3);
 
 	{
-		auto& refSkeleton = skelMesh->RefSkeleton;
+		auto& refSkeleton = skelMesh->GetRefSkeleton();
 		FReferenceSkeletonModifier refSkelModifier(refSkeleton, nullptr);
 		auto boneInfo1 = FMeshBoneInfo(FName(*rawBone1.Name), rawBone1.Name, rawBone1.ParentIndex);//FName(*boneName1), boneName1, INDEX_NONE);
 		auto boneInfo2 = FMeshBoneInfo(FName(*boneName2), boneName2, 0);

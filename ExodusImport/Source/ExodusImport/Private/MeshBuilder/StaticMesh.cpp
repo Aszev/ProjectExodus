@@ -28,9 +28,9 @@ void MeshBuilder::setupStaticMesh(UStaticMesh *mesh, const JsonMesh &jsonMesh, s
 	srcModel.StaticMeshOwner = mesh;
 #endif
 
-	mesh->LightingGuid = FGuid::NewGuid();
-	mesh->LightMapResolution = 64;
-	mesh->LightMapCoordinateIndex = 1;
+	mesh->SetLightingGuid(FGuid::NewGuid());
+	mesh->SetLightMapResolution(64);
+	mesh->SetLightMapCoordinateIndex(1);
 
 	FRawMesh newRawMesh;
 	srcModel.RawMeshBulkData->LoadRawMesh(newRawMesh);
@@ -170,7 +170,7 @@ void MeshBuilder::setupStaticMesh(UStaticMesh *mesh, const JsonMesh &jsonMesh, s
 	}
 
 	if (materialSetup){
-		materialSetup(mesh->StaticMaterials);
+		materialSetup(mesh->GetStaticMaterials());
 	}
 
 	srcModel.RawMeshBulkData->SaveRawMesh(newRawMesh);
@@ -192,7 +192,7 @@ void MeshBuilder::setupStaticMesh(UStaticMesh *mesh, const JsonMesh &jsonMesh, s
 		TArray<FVector> verts(KDopDir18, 18);
 		GenerateKDopAsSimpleCollision(mesh, verts);
 
-		UBodySetup* bodySetup = mesh->BodySetup;
+		UBodySetup* bodySetup = mesh->GetBodySetup();
 		if (!bodySetup || (bodySetup && (bodySetup->AggGeom.GetElementCount() == 0))){
 			UE_LOG(JsonLog, Warning, TEXT("Could not generate convex collision for mesh %d(\"%s\"):\nRebuilding as a box."), (int)jsonMesh.id, *jsonMesh.name);
 			GenerateBoxAsSimpleCollision(mesh);

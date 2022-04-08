@@ -88,7 +88,7 @@ FLinearColor LandscapeTest::indexToColor(int index){
 
 ULandscapeLayerInfoObject* LandscapeTest::createTerrainLayerInfo(const FString &layerName, int layerIndex){
 	auto fullPath = FString::Printf(TEXT("%s/%s"), *getTestRootPath(), *layerName);
-	auto pkg = CreatePackage(0, *fullPath);
+	auto pkg = CreatePackage( *fullPath);
 
 	auto result = NewObject<ULandscapeLayerInfoObject>(pkg);
 	result->LayerName = *layerName;
@@ -276,7 +276,7 @@ ALandscape* LandscapeTest::createTestLandscape(UWorld *world, const TArray<FStri
 
 UMaterial* LandscapeTest::createLandscapeMaterial(const TArray<FString> &names){
 	auto fullPath = FString::Printf(TEXT("%s/%s"), *getTestRootPath(), TEXT("material"));
-	auto matPkg = CreatePackage(0, *fullPath);
+	auto matPkg = CreatePackage( *fullPath);
 
 	auto matFactory = NewObject<UMaterialFactoryNew>();
 	auto material = (UMaterial*)matFactory->FactoryCreateNew(

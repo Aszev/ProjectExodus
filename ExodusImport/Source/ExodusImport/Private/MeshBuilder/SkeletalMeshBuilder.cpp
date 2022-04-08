@@ -521,19 +521,19 @@ void SkeletalMeshBuilder::setupSkeletalMesh(USkeletalMesh *skelMesh, const JsonM
 	auto &lodModel = importModel->LODModels[0];
 
 	auto hasNormals = jsonMesh.normals.Num() != 0;
-	skelMesh->bHasVertexColors = (jsonMesh.colors.Num() != 0);
+	skelMesh->SetHasVertexColors(jsonMesh.colors.Num() != 0);
 	auto hasTangents = jsonMesh.tangents.Num() != 0;
 
 //#if !((ENGINE_MAJOR_VERSION >= 4) && (ENGINE_MINOR_VERSION >= 24))
 #ifndef EXODUS_UE_VER_4_24_GE
 	skelMesh->bUseFullPrecisionUVs = true;//those were deprecated in 4.24, apparently.
 #endif
-	skelMesh->bHasBeenSimplified = false;
+	skelMesh->SetHasBeenSimplified(false);
 
 	lodModel.NumTexCoords = jsonMesh.getNumTexCoords();//numTexCoords;
 
 	if (materialSetup){
-		materialSetup(skelMesh->Materials);
+		materialSetup(skelMesh->GetMaterials());
 	}
 
 	auto skelId = jsonMesh.defaultSkeletonId;
@@ -569,7 +569,7 @@ void SkeletalMeshBuilder::setupSkeletalMesh(USkeletalMesh *skelMesh, const JsonM
 		meshToSkeletonBoneMap.Add(defaultBoneIndex, skeletonBoneIndex);
 	}
 
-	auto &refSkeleton = skelMesh->RefSkeleton;
+	auto &refSkeleton = skelMesh->GetRefSkeleton();
 	setupReferenceSkeleton(refSkeleton, *jsonSkel, &jsonMesh, nullptr);//hmm.... exisitng skeleton?
 
 	TArray<UMorphTarget*> morphTargets;
@@ -606,10 +606,10 @@ void SkeletalMeshBuilder::setupSkeletalMesh(USkeletalMesh *skelMesh, const JsonM
 		);
 		if (onNewSkeleton)
 			onNewSkeleton(*jsonSkel, skeleton);
-		skelMesh->Skeleton = skeleton;
+		skelMesh->SetSkeleton(skeleton);
 	}
 	else{
-		skelMesh->Skeleton = foundSkeleton;
+		skelMesh->SetSkeleton(foundSkeleton);
 	}
 
 	buildData.processBlendShapes(skelMesh, jsonMesh);
@@ -623,7 +623,7 @@ void SkeletalMeshBuilder::setupSkeletalMesh(USkeletalMesh *skelMesh, const JsonM
 	Hmm.
 	*/
 
-	registerPreviewMesh(skelMesh->Skeleton, skelMesh, jsonMesh);
+	registerPreviewMesh(skelMesh->GetSkeleton(), skelMesh, jsonMesh);
 
 	skelMesh->PostEditChange();
 	skelMesh->MarkPackageDirty();

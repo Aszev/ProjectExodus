@@ -201,9 +201,9 @@ void UnrealUtilities::generateStaticMesh(UStaticMesh *mesh, RawMeshFillCallback 
 	srcModel.StaticMeshOwner = mesh;
 #endif
 
-	mesh->LightingGuid = FGuid::NewGuid();
-	mesh->LightMapResolution = 64;///config?`
-	mesh->LightMapCoordinateIndex = 1;
+	mesh->SetLightingGuid(FGuid::NewGuid());
+	mesh->SetLightMapResolution(64);///config?`
+	mesh->SetLightMapCoordinateIndex(1);
 	if (preConfig)
 		preConfig(mesh, srcModel);
 
