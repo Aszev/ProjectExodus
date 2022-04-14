@@ -38,8 +38,8 @@ namespace SceneExport{
 			//name = System.IO.Path.GetFileName(path);
 			name = prefabObject.name;//looks like name of prefab mirrors that of a file, sans extension
 			//prefabType = PrefabUtility.GetPrefabType(prefabObject).ToString();
-			prefabAssetType = PrefabUtility.GetPrefabAssetType(prefabObject).ToString();
-			prefabInstanceStatus = PrefabUtility.GetPrefabInstanceStatus(prefabObject).ToString();
+			//prefabAssetType = PrefabUtility.GetPrefabAssetType(prefabObject).ToString();
+			//prefabInstanceStatus = PrefabUtility.GetPrefabInstanceStatus(prefabObject).ToString();
 			
 			var mapper = resMap.getPrefabObjectMapper(prefabObject);
 			for(int i = 0; i < mapper.numObjects; i++){
